@@ -53,8 +53,8 @@ class SubmitPhotoForm extends React.Component {
     let error = null;
 
     if(!photo.file) error = 'You have to select an image';
-    else if(!photo.title.length || !photo.author.length || !photo.email.length) error = `You can't leave title and author fields empty`;
-    else if(photo.title.length > 50) error = `Title can't be longer than 25 characters`;
+    else if(!photo.title.length || !photo.author.length || !photo.email.length) error = `You can't leave title, author and email fields empty`;
+    else if(photo.title.length > 50) error = `Title can't be longer than 50 characters`;
 
     if(!error) {
       const formData = new FormData();
@@ -87,19 +87,19 @@ class SubmitPhotoForm extends React.Component {
               <Col xs="12" md="6" className="order-2 order-md-1">
                 <FormGroup>
                   <Label for="photoTitle">Photo title</Label>
-                  <Input id="photoTitle" type="text" maxLength="25" name="title" onChange={handleChange} placeholder="Type your title here" required />
+                  <Input id="photoTitle" type="text" maxLength="25" name="title" onChange={handleChange} placeholder="Type your title here" />
                 </FormGroup>
                 <FormGroup>
                   <Label for="photoAuthor">Author</Label>
-                  <Input id="photoAuthor" type="text" name="author" onChange={handleChange} placeholder="Type your title here" required />
+                  <Input id="photoAuthor" type="text" name="author" onChange={handleChange} placeholder="Type your title here" />
                 </FormGroup>
                 <FormGroup>
                   <Label for="authorEmail">Author e-mail</Label>
-                  <Input id="authorEmail" type="email" name="email" onChange={handleChange} placeholder="Type your email here" required />
+                  <Input id="authorEmail" type="email" name="email" onChange={handleChange} placeholder="Type your email here" />
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" required />
+                    <Input type="checkbox" required/>
                     I agree with the <Link to="/terms-of-use">terms of use</Link>
                   </Label>
                 </FormGroup>

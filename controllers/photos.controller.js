@@ -7,23 +7,27 @@ exports.add = async (req, res) => {
   try {
     const { title, author, email } = req.fields;
     const file = req.files.file;
-    const checkMail = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'g');
-    const validatedMail = checkMail.test(email);
-    const onlyLetters =  /^[a-zA-Z]+$/;
-    const validatedTitle = onlyLetters.test(title)
-    const validatedAuthor = onlyLetters.test(author)
    
     if (title && author && email && file) { // if fields are not empty...
       const fileName = file.path.split('/').slice(-1)[0]; // cut only filename from full path, e.g. C:/test/abc.jpg -> abc.jpg
       const fileExt = fileName.split('.').slice(-1)[0];
+
+      const checkMail = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'g');
+      const validatedMail = checkMail.test(email);
+      const onlyLetters =  /^[a-zA-Z]+$/;
+      const validatedTitle = onlyLetters.test(title)
+      const validatedAuthor = onlyLetters.test(author)
+
       if((fileExt === "jpg" || fileExt === "png" || fileExt === "gif")  && author.length <= 50
       && title.length <= 25 &&  validatedAuthor && validatedMail && validatedTitle ){
       const newPhoto = new Photo({ title, author, email, src: fileName, votes: 0 });
       await newPhoto.save(); // ...save new photo in DB
       res.json(newPhoto);
+    }else {
+      throw new Error('Wrong input!');
     }
     } else {
-      throw new Error('Wrong input!');
+      throw new Error('Missing input!');
     }
 
   } catch(err) {
