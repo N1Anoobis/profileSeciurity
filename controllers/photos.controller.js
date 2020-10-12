@@ -64,6 +64,16 @@ exports.loadAll = async (req, res) => {
 exports.vote = async (req, res) => {
 
   try {
+    const uploadNewPhoto = async (res) => {
+      const photoToUpdate = await Photo.findOne({
+        _id: req.params.id
+      });
+      photoToUpdate.votes++;
+      photoToUpdate.save();
+      res.send({
+        message: 'OK'
+      });
+    }
     //Did user vote before?
     const user = await Voter.findOne({
       user: req.clientIp
@@ -86,10 +96,10 @@ exports.vote = async (req, res) => {
             votes: [req.params.id]
           }
         });
-        uploadNewPhoto();
+        uploadNewPhoto(res);
         // Dont allow user to vote for photo second time
       } else {
-        res.status(500).json(err);
+        res.status(400).json(err);
       }
       //New user - create and save him in DB along side with his vote
     } else {
@@ -104,14 +114,3 @@ exports.vote = async (req, res) => {
     res.status(500).json(err);
   }
 };
-
-const uploadNewPhoto = () => {
-  const photoToUpdate = Photo.findOne({
-    _id: req.params.id
-  });
-  photoToUpdate.votes++;
-  photoToUpdate.save();
-  res.send({
-    message: 'OK'
-  });
-}
