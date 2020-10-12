@@ -43,7 +43,7 @@ class SubmitPhotoForm extends React.Component {
     const { photo } = this.state;
     const { value, name } = target;
 
-    this.setState({ photo: { ...photo, [name]: value }});
+   this.setState({ photo: { ...photo, [name]: value }});
   }
 
   submitForm = (e) => {
@@ -91,7 +91,7 @@ class SubmitPhotoForm extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <Label for="photoAuthor">Author</Label>
-                  <Input id="photoAuthor" type="text" name="author" onChange={handleChange} placeholder="Type your title here" />
+                  <Input id="photoAuthor" type="text" name="author" maxLength="50" onChange={handleChange} placeholder="Type your title here" />
                 </FormGroup>
                 <FormGroup>
                   <Label for="authorEmail">Author e-mail</Label>
