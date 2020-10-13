@@ -63,8 +63,8 @@ exports.loadAll = async (req, res) => {
 
 exports.vote = async (req, res) => {
 
-  try {
-    const uploadNewPhoto = async (res) => {
+  const uploadNewVote = async (req) => {
+    try {
       const photoToUpdate = await Photo.findOne({
         _id: req.params.id
       });
@@ -73,7 +73,13 @@ exports.vote = async (req, res) => {
       res.send({
         message: 'OK'
       });
+    } catch (err) {
+      res.status(500).json(err);
     }
+  }
+
+  try {
+
     //Did user vote before?
     const user = await Voter.findOne({
       user: req.clientIp
@@ -96,10 +102,12 @@ exports.vote = async (req, res) => {
             votes: [req.params.id]
           }
         });
-        uploadNewPhoto(res);
+        uploadNewVote(req);
         // Dont allow user to vote for photo second time
       } else {
-        res.status(400).json(err);
+        res.status(400).send({
+          message: 'Wrong input'
+        });
       }
       //New user - create and save him in DB along side with his vote
     } else {
@@ -108,9 +116,9 @@ exports.vote = async (req, res) => {
         votes: [req.params.id]
       });
       await newVoter.save();
-      uploadNewPhoto();
+      uploadNewVote(req);
     }
   } catch (err) {
     res.status(500).json(err);
   }
-};
+}
